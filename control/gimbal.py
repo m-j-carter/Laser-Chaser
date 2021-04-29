@@ -66,9 +66,10 @@ class Servo:
 
     def move(self, angle):
         # move the servo to the specified angle in degrees
-        assert Servo.MAX_ANGLE >= angle >= Servo.MIN_ANGLE, "angle must be an integer between %d and %d".format(Servo.MIN_ANGLE, Servo.MAX_ANGLE)
+        assert Servo.MAX_ANGLE >= (angle) >= Servo.MIN_ANGLE, \
+            "angle (%d) must be an integer between %d and %d" % (angle, Servo.MIN_ANGLE, Servo.MAX_ANGLE)
         self._curr_angle = angle
-        self._servo.ChangeDutyCycle(self._deg_to_pwm(self.__curr_angle))
+        self._servo.ChangeDutyCycle(self._deg_to_pwm(self._curr_angle))
 
     def _deg_to_pwm(self, angle):
         # calculates and returns the PWM duty cycle as an int for a specified angle in degrees.

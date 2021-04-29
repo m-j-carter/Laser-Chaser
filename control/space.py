@@ -12,8 +12,11 @@
 # For now, the aim_at_target() and aim_at_point_xy() methods will 
 # also handle gimbal movements.
 
+import os
+import sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from gimbal import Gimbal
+from control.gimbal import Gimbal
 import math
 
 
@@ -48,8 +51,10 @@ class Space:
 
     def set_target_xy_coords(self, target_x, target_y):
         # Sets the coordinates of the target in space
-        assert self._limits.x_min <= target_x <= self._limits.x_max, "target's X coordinate out of range"
-        assert self._limits.y_min <= target_y <= self._limits.y_max, "target's Y coordinate out of range"
+        assert self._limits.x_min <= target_x <= self._limits.x_max, \
+            "target's X coord (%d) out of range (%d,%d)" % (target_x, self._limits.x_min, self._limits.x_max)
+        assert self._limits.y_min <= target_y <= self._limits.y_max, \
+            "target's Y coord (%d) out of range (%d,%d)" % (target_y, self._limits.y_min, self._limits.y_max)
         self._target_coords.x = target_x 
         self._target_coords.y = target_y
 
@@ -59,6 +64,9 @@ class Space:
         # then performs the moves. 
         pan_angle = self._calc_pan_angle(self._target_coords.x, self._target_coords.y)
         tilt_angle = self._calc_tilt_angle(self._target_coords.x, self._limits.z_min)
+
+        print("pan to", pan_angle)
+        print("tilt to", tilt_angle)
 
         self._gimbal.pan(pan_angle)
         self._gimbal.tilt(tilt_angle)
